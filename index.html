@@ -49,8 +49,11 @@
 
     <script>
         let chart;
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
-        
+        <script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
+
+async function loadData()
+
         async function loadData() {
             const status = document.getElementById('status');
             status.style.display = 'block';
@@ -155,3 +158,4 @@
     </script>
 </body>
 </html>
+
