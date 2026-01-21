@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body>
+    <canvas id="chart" width="500" height="500"></canvas>
+    <script>
+        // Seus dados do Sheets (copiados manualmente)
+        const data = {
+            labels: ['Moradia', 'Alimentação', 'Transporte'],
+            values: [3000, 1200, 800]
+        };
+        
+        new Chart(document.getElementById('chart'), {
+            type: 'doughnut',
+            data: { labels: data.labels, datasets: [{data: data.values, backgroundColor: ['#FF6384','#36A2EB','#FFCE56']}] }
+        });
+    </script>
+</body>
+</html>
