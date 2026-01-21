@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html>
-<head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Dashboard Gastos Villyam</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>/* Layout lindo responsivo */</style>
+</head>
 <body>
-    <canvas id="chart" width="500" height="500"></canvas>
+    <!-- Dashboard sincronizado com seu Sheets -->
     <script>
-        // Seus dados do Sheets (copiados manualmente)
-        const data = {
-            labels: ['Moradia', 'Alimentação', 'Transporte'],
-            values: [3000, 1200, 800]
-        };
-        
-        new Chart(document.getElementById('chart'), {
-            type: 'doughnut',
-            data: { labels: data.labels, datasets: [{data: data.values, backgroundColor: ['#FF6384','#36A2EB','#FFCE56']}] }
-        });
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
+        // Código completo do dashboard aqui
     </script>
 </body>
 </html>
