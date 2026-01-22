@@ -1,133 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💰 Dashboard Gastos AO VIVO</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
-.container{max-width:1200px;margin:auto;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
-.header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:40px;text-align:center}
-.controls{padding:25px;text-align:center;background:#f8f9fa}
-button{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:15px 30px;border-radius:50px;cursor:pointer}
-.content{display:grid;grid-template-columns:1fr 320px;gap:40px;padding:40px}
-.total{font-size:2.5em;text-align:center;font-weight:bold;color:#667eea;margin-top:20px}
-@media(max-width:768px){.content{grid-template-columns:1fr}}
-</style>
+<title>Teste Extração Sheets</title>
 </head>
-
 <body>
-<div class="container">
-  <div class="header">
-    <h1>💰 Dashboard Gastos</h1>
-    <p><strong>Villyam + Esposa</strong> • Google Sheets AO VIVO</p>
-  </div>
-
-  <div class="controls">
-    <button onclick="loadData()">🔄 Atualizar</button>
-    <div id="status"></div>
-  </div>
-
-  <div class="content">
-    <div style="height:450px">
-      <canvas id="gastoChart"></canvas>
-    </div>
-    <div>
-      <h3>📊 Resumo</h3>
-      <div id="resumoList"></div>
-      <div class="total" id="totalGeral">R$ 0,00</div>
-    </div>
-  </div>
-</div>
+<h2>Extração Dados</h2>
+<pre id="dados"></pre>
 
 <script>
-let chart;
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
-
-async function loadData() {
-  const status = document.getElementById('status');
-  status.style.display = 'block';
-  status.innerText = '🔄 Sincronizando com Google Sheets...';
-
-  try {
-    const res = await fetch(CSV_URL);
-    const csv = await res.text();
-
-    const linhas = csv.trim().split('\n');
-    const separador = linhas[0].includes(';') ? ';' : ',';
-
-    const labels = [];
-    const values = [];
-
-    linhas.slice(1).forEach(linha => {
-      if (!linha.trim()) return;
-
-      const col = linha.split(separador);
-      if (col.length < 2) return;
-
-      const categoria = col[0].replace(/"/g,'').trim();
-      const valorTexto = col[1].replace(/"/g,'').trim();
-
-      const valor = Number(
-        valorTexto
-          .replace('R$', "")
-          .replace(/\./g, "")
-          .replace(',', ".")
-          .trim()
-      );
-
-      if (categoria && !isNaN(valor)) {
-        labels.push(categoria);
-        values.push(valor);
-      }
-    });
-
-    if (!labels.length) throw new Error('Nenhum dado válido após parsing');
-
-    updateDashboard(labels, values);
-    status.innerText = '✅ Dados carregados com sucesso';
-    setTimeout(()=>status.style.display='none',3000);
-
-  } catch (e) {
-    console.error(e);
-    status.innerText = '❌ Erro ao ler dados da planilha';
-    status.style.background='#f8d7da';
-  }
-}
-
-function updateDashboard(labels, values) {
-  const total = values.reduce((a,b)=>a+b,0);
-
-  if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('gastoChart'), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data: values }] },
-    options: { plugins: { legend: { position: 'bottom' } } }
-  });
-
-  const list = document.getElementById('resumoList');
-  list.innerHTML = '';
-
-  labels.forEach((l,i)=>{
-    const p = ((values[i]/total)*100).toFixed(1);
-    list.innerHTML += `
-      <div style="display:flex;justify-content:space-between;margin:10px 0">
-        <span>${l}</span>
-        <strong>R$ ${values[i].toLocaleString('pt-BR')} (${p}%)</strong>
-      </div>`;
-  });
-
-  document.getElementById('totalGeral').innerText =
-    total.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-}
-
-window.onload = loadData;
-</script>
-
-</body>
-</html>
-
-
+async function extrairDados() {
+  const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
+  
+  try
