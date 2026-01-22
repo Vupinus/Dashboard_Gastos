@@ -49,24 +49,27 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1IT
 
 async function loadData() {
   const status = document.getElementById('status');
-  status.innerText = '🔄 Sincronizando...';
+  status.style.display = 'block';
+  status.innerText = '🔄 Sincronizando com Google Sheets...';
 
   try {
     const res = await fetch(CSV_URL);
     const csv = await res.text();
-    const linhas = csv.split('\n').slice(1);
+
+    const linhas = csv.trim().split('\n');
+    const separador = linhas[0].includes(';') ? ';' : ',';
 
     const labels = [];
     const values = [];
 
-    linhas.forEach(linha => {
+    linhas.slice(1).forEach(linha => {
       if (!linha.trim()) return;
 
-      const col = linha.split(';');
-      const categoria = col[0]?.trim();
-      const valorTexto = col[1];
+      const col = linha.split(separador);
+      if (col.length < 2) return;
 
-      if (!categoria || !valorTexto) return;
+      const categoria = col[0].replace(/"/g,'').trim();
+      const valorTexto = col[1].replace(/"/g,'').trim();
 
       const valor = Number(
         valorTexto
@@ -76,31 +79,33 @@ async function loadData() {
           .trim()
       );
 
-      if (!isNaN(valor)) {
+      if (categoria && !isNaN(valor)) {
         labels.push(categoria);
         values.push(valor);
       }
     });
 
-    if (!labels.length) throw 'Nenhum dado válido';
+    if (!labels.length) throw new Error('Nenhum dado válido após parsing');
 
     updateDashboard(labels, values);
-    status.innerText = '✅ Atualizado com sucesso';
+    status.innerText = '✅ Dados carregados com sucesso';
+    setTimeout(()=>status.style.display='none',3000);
 
   } catch (e) {
     console.error(e);
-    status.innerText = '❌ Erro ao carregar dados';
+    status.innerText = '❌ Erro ao ler dados da planilha';
+    status.style.background='#f8d7da';
   }
 }
 
 function updateDashboard(labels, values) {
   const total = values.reduce((a,b)=>a+b,0);
 
-  if(chart) chart.destroy();
-  chart = new Chart(document.getElementById('gastoChart'),{
-    type:'doughnut',
-    data:{labels,datasets:[{data:values}]},
-    options:{plugins:{legend:{position:'bottom'}}}
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('gastoChart'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data: values }] },
+    options: { plugins: { legend: { position: 'bottom' } } }
   });
 
   const list = document.getElementById('resumoList');
@@ -121,5 +126,7 @@ function updateDashboard(labels, values) {
 
 window.onload = loadData;
 </script>
+
 </body>
 </html>
+
