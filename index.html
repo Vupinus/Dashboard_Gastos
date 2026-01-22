@@ -73,9 +73,9 @@ async function loadData() {
 
       const valor = Number(
         valorTexto
-          .replace('R$', '')
-          .replace(/\./g, '')
-          .replace(',', '.')
+          .replace('R$', "")
+          .replace(/\./g, "")
+          .replace(',', ".")
           .trim()
       );
 
@@ -129,4 +129,5 @@ window.onload = loadData;
 
 </body>
 </html>
+
 
