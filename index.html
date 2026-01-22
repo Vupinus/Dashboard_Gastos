@@ -7,8 +7,14 @@
 <h2>Extração Dados</h2>
 <pre id="dados"></pre>
 
-<script>
+<script>// TRATAMENTO DE DADOS GOOGLE SHEETS (BRASIL)
+
+// 1. Proxy CORS
+const proxyUrl = 'https://api.allorigins.win/raw?url=';
+const sheetUrl = encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv');
+
+// 2. Fetch + Parse CSV
 async function extrairDados() {
-  const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkcXwtIb0eb1ITcVfOYQEpginAMOgWwP9bxKlK5QX5A3Xsj_aAYtAs4mpMItN5sqmEqfSB0svt1n4K/pub?output=csv';
-  
   try
+
+
